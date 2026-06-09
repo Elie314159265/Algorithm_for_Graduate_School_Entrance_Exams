@@ -67,10 +67,7 @@ void delete_second(void){
 void average_top_two(void){
 	if(stack_depth() >= 2){
 		double value1 = pop(), value2 = pop();
-		struct node *nodep = (struct node*)malloc(sizeof(struct node));
-		nodep -> value = (value1 + value2)/2;
-		nodep -> next = stack;
-		stack = nodep;
+		push((value1 + value2)/2);
 	}
 }
 
