@@ -66,8 +66,9 @@ void delete_second(void){
 /*問４．上から2つの平均値を計算して積む*/
 void average_top_two(void){
 	if(stack_depth() >= 2){
-		double value1 = pop(), value2 = pop();
-		push((value1 + value2)/2);
+		double value1 = pop();
+		double value2 = pop();
+		push((value1 + value2)/2.0);
 	}
 }
 
