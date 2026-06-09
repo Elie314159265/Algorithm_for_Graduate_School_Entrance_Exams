@@ -34,8 +34,9 @@ double sum_stack(void){
 /*問２．スタックの最上部の値を複製する*/
 void duplicate(void){
 	if(stack_depth() > 0){
-		struct node *nodep = (stack node*)malloc(sizeof(struct node));
-		nodep = stack;
+		struct node *nodep = (struct node*)malloc(sizeof(struct node));
+		// nodep = stackとするとmallocで確保したメモリ領域を捨てて既存の先頭ノードのアドレスで上書きしてしまい、メモリリークが発生する。ノードそのものではなく「ノードの持つ値」をコピーが正しい。
+		nodep -> value = stack -> value;
 		nodep -> next = stack;
 		stack = nodep;
 	}
@@ -43,22 +44,18 @@ void duplicate(void){
 
 /*問３．スタックを完全に空にする*/
 void clear_stack(void){
-	struct node *nodep = stack;
-	while(nodep != NULL){
-		pop(nodep);
+	while(stack != NULL){
+		pop(); // pop関数の引数は無し
 	}
+
 }
 
 /*問４．上から2番目の数値を最上部の数値で除算し、結果を積む*/
 void divide(void){
-	if(stack != NULL && stack -> value != 0){
-		double value1 = stack -> value;
-		double value2 = stack -> next -> value;
-		struct node *nodep = (stack node*)malloc(sizeof(struct node));
-		nodep = stack;
-		nodep -> value = value2 / value1;
-		nodep -> next = stack;
-		stack = nodep;
+	if(stack_depth() >= 2 && stack -> value != 0.0){
+		double value1 = pop(); // popで安全に値を取り出す。使わない場合はfreeでノードを開放する必要がある
+		double value2 = pop();
+		push(value2 / value1);
 	}
 }
 
