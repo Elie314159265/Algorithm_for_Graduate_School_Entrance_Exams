@@ -20,6 +20,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct node{
+	double value;
+	struct node *next;
+};
+
+struct node *stack = NULL;
+
+void print_stack(void){
+	struct node *nodep = stack;
+	while(nodep != NULL){
+		printf("|%5.2f|", nodep -> value);
+		nodep = nodep -> next;
+	}
+	printf("\n");
+}
+
+int stack_depth(void)
+{
+	struct node *nodep = stack;
+	int depth = 0;
+	while(nodep != NULL){
+		depth++;
+		nodep = nodep -> next;
+	}
+	return depth;
+}
+
+void push(double top_value){
+	struct node *nodep = (struct node*)malloc(sizeof(struct node));
+	nodep -> value = top_value;
+	nodep -> next = stack;
+	stack = nodep;
+}
+
+double pop(void){
+	if(stack_depth() > 0){
+		struct node *nodep = stack -> next;
+		double top_value = stack -> value;
+		free(stack);
+		stack = nodep;
+		return top_value;
+	}
+	return 0.0;
+}
+
+
 /*問１．スタックの要素の合計を返す*/
 double sum_stack(void){
 	struct node *nodep = stack;
@@ -75,4 +121,40 @@ void move_top_to_third(void){
 		
 		
 
+int main(void) {
+    printf("=== 初期データのセット ===\n");
+    push(4.0);
+    push(8.0);
+    push(2.0);
+    /* 現在のスタック: 最上部から順に 2.0 -> 8.0 -> 4.0 */
+    printf("現在のスタック: ");
+    print_stack(); 
 
+    printf("\n=== 問1: sum_stack のテスト ===\n");
+    printf("合計値: %5.2f\n", sum_stack()); /* 期待される出力: 14.00 */
+
+    printf("\n=== 問2: duplicate のテスト ===\n");
+    duplicate(); /* 最上部の 2.0 を複製 */
+    printf("複製後のスタック: ");
+    print_stack(); /* 期待される出力: | 2.00| | 2.00| | 8.00| | 4.00| */
+
+    printf("\n=== 問4: divide のテスト ===\n");
+    /* 上から2番目(2.0) を 最上部(2.0) で除算し、結果(1.0) を積む */
+    divide(); 
+    printf("除算後のスタック: ");
+    print_stack(); /* 期待される出力: | 1.00| | 8.00| | 4.00| */
+
+    printf("\n=== 問5: move_top_to_third のテスト ===\n");
+    /* 最上部の 1.0 を、上から3番目に移動させる */
+    move_top_to_third();
+    printf("移動後のスタック: ");
+    print_stack(); /* 期待される出力: | 8.00| | 4.00| | 1.00| */
+
+    printf("\n=== 問3: clear_stack のテスト ===\n");
+    clear_stack(); /* スタックをすべて空にする */
+    printf("クリア後のスタック: ");
+    print_stack(); /* 期待される出力: (何も出力されず改行のみ) */
+    printf("現在の深さ: %d\n", stack_depth()); /* 期待される出力: 0 */
+
+    return 0;
+}
