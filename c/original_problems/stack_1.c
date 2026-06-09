@@ -1,0 +1,81 @@
+/*
+[スタック・ポインタ操作 オリジナル問題 created by NotebookLM]
+
+問題 逆ポーランド記法に基づく実数の演算を行う計算機プログラムを拡張する。演算に使用するスタックは、構造体 node をポインタで連結したリストとして表現され、外部変数 stack が最上部を指す仕様である。以下の問いに答えよ。
+
+問1 関数 sum_stack は、スタックに積まれているすべての数値の合計を計算して返す関数である。空欄 A を埋めて関数 sum_stack を完成せよ。ただし、スタックが空の場合は、合計を 0.0 とすること。
+
+問2 関数 duplicate は、スタックの最上部にある数値を複製し、新たにスタックの最上部に積む（スタックが1段深くなる）関数である。空欄 B を埋めて関数 duplicate を完成せよ。ただし、スタックが空の場合は何も行わないものとする。
+
+問3 関数 clear_stack は、スタックに積まれているすべての要素を取り出し、割り当てられたメモリを解放してスタックを空にする関数である。関数 pop を利用して空欄 C を埋め、関数 clear_stack を完成せよ。
+
+問4 関数 divide は、スタックの上から2番目の数値を最上部の数値で除算し（スタックは2段浅くなる）、その結果をスタックに積む関数である。空欄 D を埋めて関数 divide を完成せよ。ただし、スタックに二つ以上の数値が積まれていない場合や、最上部の数値が 0.0（ゼロ除算）の場合は、何も行わないものとする。
+
+問5 関数 move_top_to_third は、スタックの最上部にある要素を、上から3番目の位置に移動させる関数である（スタックの要素数は変わらない）。関数 pop と push を呼び出して実現することも可能であるが、ここでは node のポインタ操作のみで行う方法で、空欄 E を埋めて関数を完成せよ。ただし、スタックに三つ以上の数値が積まれていない場合は、何も行わないものとする。
+
+*/
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/*問１．スタックの要素の合計を返す*/
+double sum_stack(void){
+	struct node *nodep = stack;
+	double total = 0.0;
+	while(nodep != NULL){
+		total += nodep -> value;
+		nodep = nodep -> next;
+	}
+	return total;
+}
+
+/*問２．スタックの最上部の値を複製する*/
+void duplicate(void){
+	if(stack_depth() > 0){
+		struct node *nodep = (stack node*)malloc(sizeof(struct node));
+		nodep = stack;
+		nodep -> next = stack;
+		stack = nodep;
+	}
+}
+
+/*問３．スタックを完全に空にする*/
+void clear_stack(void){
+	struct node *nodep = stack;
+	while(nodep != NULL){
+		pop(nodep);
+	}
+}
+
+/*問４．上から2番目の数値を最上部の数値で除算し、結果を積む*/
+void divide(void){
+	if(stack != NULL && stack -> value != 0){
+		double value1 = stack -> value;
+		double value2 = stack -> next -> value;
+		struct node *nodep = (stack node*)malloc(sizeof(struct node));
+		nodep = stack;
+		nodep -> value = value2 / value1;
+		nodep -> next = stack;
+		stack = nodep;
+	}
+}
+
+/*問５．最上部の要素をポインタ操作で上から3番目に移動させる*/
+void move_top_to_third(void){
+	if(stack_depth()>=3){
+		struct node *nodep1 = stack-> next;
+		struct node *nodep2 = stack;
+		nodep2 -> next = nodep1 -> next -> next;
+		nodep1 -> next -> next = nodep2;
+		stack = nodep1;
+	}
+}
+		
+
+		
+		
+		
+
+
