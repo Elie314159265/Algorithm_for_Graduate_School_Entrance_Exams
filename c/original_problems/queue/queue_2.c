@@ -12,18 +12,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 struct node{
 	double value;
 	struct node *next;
 };
 
+struct node *head = NULL;
+struct node *tail = NULL;
+struct node *stack = NULL;
 
-struct node{
-	double value;
-	struct node *next;
+void push(double top_value){
+	struct node *nodep = (struct node*)malloc(sizeof(struct node));
+	nodep -> value = top_value;
+	nodep -> next = stack;
+	stack = nodep;
 }
 
-struct node *head = NULL, *tail = NULL;
+double pop(void){
+	if(stack == NULL){
+		return 0.0;
+	}
+	struct node *temp = stack;
+	double top_value = stack -> value;
+
+	stack = stack -> next;
+	free(temp);
+	return top_value;
+}
+
+void print_stack(void){
+	struct node *nodep = stack;
+	while(nodep != NULL){
+		printf("|%5.2f|",nodep -> value);
+		nodep = nodep -> next;
+	}
+	printf("\n");
+}
+
+
 
 void enqueue(double value){
 	struct node *new_node = (struct node*)malloc(sizeof(struct node));
@@ -91,10 +119,20 @@ void remove_negative_from_queue(void){
 
 	while(curr != NULL){
 		if(curr -> value < 0.0){
-			prev -> next = curr -> next;
-			free(curr);
-			curr = prev -> next;
-		}else {
+			struct node *temp = curr;
+			if(prev == NULL){
+				head = curr -> next;
+				curr = head;
+			}else{
+				prev -> next = curr -> next;
+				curr = prev -> next;
+			}
+			
+			if(temp == tail){
+				tail = prev;
+			}
+			free(temp);
+		}else{
 			prev = curr;
 			curr = curr -> next;
 		}
@@ -102,4 +140,35 @@ void remove_negative_from_queue(void){
 }
 
 
+int main(void) {
+    printf("=== 初期データセット ===\n");
+    /* 正の数と負の数を混ぜてキューに入れる */
+    enqueue(10.0);
+    enqueue(-5.0);
+    enqueue(20.0);
+    enqueue(-15.0);
+    enqueue(30.0);
+    print_queue(); 
+    /* 期待値: [ 10.00] [-5.00] [ 20.00] [-15.00] [ 30.00] */
 
+    printf("\n=== 問3: remove_negative_from_queue() のテスト ===\n");
+    remove_negative_from_queue();
+    print_queue(); 
+    /* 期待値: [ 10.00] [ 20.00] [ 30.00] (負の数が綺麗に消える) */
+
+    printf("\n=== 問2: reverse_queue() のテスト ===\n");
+    reverse_queue();
+    print_queue(); 
+    /* 期待値: [ 30.00] [ 20.00] [ 10.00] (順番が反転する) */
+
+    printf("\n=== 問1: transfer_to_stack() のテスト ===\n");
+    transfer_to_stack();
+    print_queue(); 
+    /* 期待値: (空) (キューのデータがすべてなくなる) */
+    
+    print_stack(); 
+    /* 期待値: | 10.00| | 20.00| | 30.00| 
+       解説: 30.0 -> 20.0 -> 10.0 の順で push されるため、最後に push された 10.0 がスタックの最上部になります。 */
+
+    return 0;
+}
