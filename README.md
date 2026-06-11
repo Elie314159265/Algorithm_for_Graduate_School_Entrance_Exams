@@ -48,3 +48,6 @@ $ ./file.out
 | ヒープソート | O(n log n) | O(n log n) | O(n log n) | O(1) |
 | BFS | — | — | O(V+E) | O(V) |
 | DFS | — | — | O(V+E) | O(V) |
+
+## 追記
+cとpythonのCIを追加したい。
