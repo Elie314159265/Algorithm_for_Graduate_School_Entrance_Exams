@@ -19,6 +19,7 @@ struct node{
 struct node *head = NULL;
 struct node *tail = NULL;
 
+// 問1
 void enqueue(double value){
 	struct node *new_node = (struct node*)malloc(sizeof(struct node));
 	new_node -> value = value;
@@ -33,6 +34,7 @@ void enqueue(double value){
 	}
 }
 
+// 問2
 double dequeue(void){
 	if (head == NULL) {
 		return 0.0;
@@ -41,11 +43,44 @@ double dequeue(void){
 	double val = head -> value;
 	struct node *temp = head;
 
-	temp = head -> next;
-	free(head);
-	head = temp;
+	head = head -> next;
+	free(temp);
+	
+	if(head == NULL){
+		tail = NULL;
+	}
 
 	return val;
 }
 
 
+void print_queue(void){
+	struct node *nodep = head;
+	printf("現在のキューの出力\n");
+	if(nodep == NULL){
+		printf("空\n");
+	}
+	while(nodep != NULL){
+		printf("|%5.2f|",nodep -> value);
+		nodep = nodep -> next;
+	}
+	printf("\n");
+}
+
+
+int main(void) {
+    printf("=== enqueue(追加) のテスト ===\n");
+    enqueue(10.0); print_queue();
+    enqueue(20.0); print_queue();
+    enqueue(30.0); print_queue();
+
+    printf("\n=== dequeue(取り出し) のテスト ===\n");
+    printf("取り出し: %.2f\n", dequeue()); print_queue(); /* 10.0が出る */
+    printf("取り出し: %.2f\n", dequeue()); print_queue(); /* 20.0が出る */
+    printf("取り出し: %.2f\n", dequeue()); print_queue(); /* 30.0が出る(空になる) */
+
+    printf("\n=== 空になった後の enqueue テスト ===\n");
+    enqueue(40.0); print_queue(); /* tail=NULL の処理が正しければ成功する */
+
+    return 0;
+}
