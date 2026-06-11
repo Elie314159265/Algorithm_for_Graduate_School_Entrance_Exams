@@ -2,7 +2,8 @@
 
 ## ディレクトリ構造
 ```
-/
+python/
+|
 |---sorting/    # ソート系
 |
 |---complexity_analysis/   # 計算量解析
@@ -16,10 +17,20 @@
 |---data_structures/   # データ構造
 ```
 
+```
+c/
+|
+|---original_problems/    # 創作問題
+```
 
 ## 実行方法
 ```bash
+# pythonコード
 $ python3 file.py
+
+# C言語コード
+$ cc file.c -o file.out
+$ ./file.out
 ```
 
 ## 計算量早見表
